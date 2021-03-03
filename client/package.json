@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "main": "server/server.js",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001",
@@ -22,7 +23,7 @@
   "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
   "install": "cd server && npm i && cd ../client && npm i",
   "seed": "cd server && npm run seed"
-},
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

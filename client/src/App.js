@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from "@apollo/react-hooks";
+import ApolloClient from "apollo-boost";
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import Home from './pages/Home';
+import Home from "./pages/Home";
 
 const client = new ApolloClient({
-  uri: '/graphql'
+  uri: "/graphql",
 });
 
 function App() {
