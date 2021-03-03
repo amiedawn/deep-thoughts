@@ -1,6 +1,6 @@
-const { User, Thought } = require('../models');
-const {AuthenticationError} = require('apollo-server-express');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { User, Thought } = require("../models");
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -16,28 +16,22 @@ const resolvers = {
 
       throw new AuthenticationError("Not logged in");
     },
-
-    // get all users
     users: async () => {
       return User.find()
         .select("-__v -password")
-        .populate("friends")
-        .populate("thoughts");
+        .populate("thoughts")
+        .populate("friends");
     },
-    // get a user by username
     user: async (parent, { username }) => {
       return User.findOne({ username })
         .select("-__v -password")
         .populate("friends")
         .populate("thoughts");
     },
-
-    // get all thoughts
     thoughts: async (parent, { username }) => {
       const params = username ? { username } : {};
       return Thought.find(params).sort({ createdAt: -1 });
     },
-    // get a thought by ID
     thought: async (parent, { _id }) => {
       return Thought.findOne({ _id });
     },
@@ -66,9 +60,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-
     addThought: async (parent, args, context) => {
-      // look for existence of context.user because only logged in users should be able to use this
       if (context.user) {
         const thought = await Thought.create({
           ...args,
@@ -77,7 +69,7 @@ const resolvers = {
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { thoughts: thought_id } },
+          { $push: { thoughts: thought._id } },
           { new: true }
         );
 
@@ -86,7 +78,6 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-
     addReaction: async (parent, { thoughtId, reactionBody }, context) => {
       if (context.user) {
         const updatedThought = await Thought.findOneAndUpdate(
@@ -104,20 +95,19 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-
     addFriend: async (parent, { friendId }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { friends: friendId } },
           { new: true }
-        ).populate('friends');
+        ).populate("friends");
 
         return updatedUser;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
-    }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 };
 
