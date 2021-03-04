@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //take data on submit and send to the server
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../utils/mutations";
 // store the user token
 import Auth from '../utils/auth';
